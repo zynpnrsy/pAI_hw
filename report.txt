@@ -1,0 +1,68 @@
+# Project Report: Traffic Navigation Simulator
+
+## 1. Executive Summary
+The **Traffic Navigation Simulator** is a Python-based web application built with **Streamlit**. It simulates a city road network as a mathematical graph, allowing users to find the most efficient paths between intersections using standard graph algorithms. The project demonstrates the application of pathfinding logic (Dijkstra and BFS) in a real-world context like urban traffic management.
+
+---
+
+## 2. Core Features
+- **Dynamic Graph Representation**: Nodes represent city intersections (A-F), and edges represent roads with specific travel costs (weights).
+- **Dual Pathfinding Algorithms**:
+    - **Dijkstra’s Algorithm**: Calculates the shortest path based on cumulative edge weights (best for travel time/distance).
+    - **BFS (Breadth-First Search)**: Calculates the shortest path based on the minimum number of road segments (ignoring weights).
+- **Traffic Simulation Mode**: A "Rush Hour" toggle that dynamically doubles the weights of all roads, simulating how congestion can change the optimal route.
+- **Interactive Visualization**: Real-time rendering of the graph using Matplotlib, where the calculated path is highlighted in red for easy analysis.
+
+---
+
+## 3. Technical Architecture
+
+### A. Technology Stack
+- **Python**: The core programming language.
+- **Streamlit**: Used for building the web-based interactive user interface.
+- **NetworkX**: A powerful library used for graph creation and pathfinding algorithm execution.
+- **Matplotlib**: Handles the rendering and drawing of the graph network.
+
+### B. Code Organization
+The application is structured into modular functions to ensure clean and maintainable code:
+
+1.  **`create_graph(traffic_mode)`**:
+    - Defines the city topology (intersections and roads).
+    - Hardcodes base weights (distances) and applies a multiplier if "Traffic Mode" is enabled.
+2.  **`run_algorithm(G, source, target, algorithm)`**:
+    - Interfaces with NetworkX to solve the shortest path problem.
+    - Returns the sequence of nodes (the path) and the total cost.
+3.  **`draw_graph(G, path, traffic_mode)`**:
+    - Generates a visual map.
+    - Uses a fixed layout (coordinate mapping) to ensure the city structure looks consistent every time.
+    - Highlights the found path in a distinct color (Coral Red).
+
+---
+
+## 4. Key Logic Explained
+
+### Dijkstra vs. BFS
+- In **Dijkstra**, the algorithm looks at the numbers on the roads. It might choose a path with 3 roads if the total sum is 10, over a path with 2 roads if that sum is 20.
+- In **BFS**, the algorithm only cares about the number of steps. It will always take the path with the fewest nodes, even if those roads are extremely "busy" or high-cost.
+
+### Traffic Mode Impact
+When "Traffic Mode" is enabled, the code iterates through all graph edges and updates their `weight` attribute:
+```python
+multiplier = 2 if traffic_mode else 1
+G.add_edge(u, v, weight=base_weight * multiplier)
+```
+This demonstrates how external variables (like time of day) can be modeled mathematically in a simulation.
+
+---
+
+## 5. Deployment and Usage
+To run the simulator locally, the following command is used:
+```bash
+streamlit run app.py
+```
+Users interact via the sidebar to set their "Start" and "End" points, choose their preferred logic, and observe the results instantly on the graphical display.
+
+---
+
+## 6. Conclusion
+This project serves as a foundational example of how data structures (Graphs) and algorithms (Search) come together to provide a functional tool for simulation. It is designed to be beginner-friendly while maintaining the robustness required for senior-level software designs.
